@@ -1,0 +1,26 @@
+---
+# This playbook will install mysql and create db user and give permissions.
+
+- name: Install Mysql package
+  sudo: true
+  apt: name={{ item }} state=installed
+  with_items:
+   - mysql-server
+   - python-mysqldb
+
+- name: set bind-address
+  sudo: true
+  ini_file: dest=/etc/mysql/my.cnf section=mysqld option=bind-address value=0.0.0.0
+  notify: restart mysql
+
+- name: Start Mysql Service
+  sudo: true
+  service: name=mysql state=started enabled=yes
+
+- name: Create Application Database
+  sudo: true
+  mysql_db: name={{ dbname }} state=present
+
+- name: Create Application DB User
+  sudo: true
+  mysql_user: name={{ dbuser }} password={{ dbpassword }} priv=*.*:ALL host='%' state=present

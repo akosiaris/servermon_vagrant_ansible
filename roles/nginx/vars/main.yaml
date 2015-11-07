@@ -1,0 +1,3 @@
+---
+app_port: 8080
+nginx_port: 80

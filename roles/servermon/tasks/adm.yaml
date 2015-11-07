@@ -1,0 +1,8 @@
+- name: set managed for puppet
+  command: "sed -i -e 's/managed = False/managed = True/g' {{ dir }}/servermon/servermon/puppet/models.py"
+- name: run syncdb
+  command: "python {{ dir }}/servermon/servermon/manage.py syncdb --noinput"
+- name: run migrate
+  command: "python {{ dir }}/servermon/servermon/manage.py migrate --noinput"
+- name: load sampledata
+  command: "python {{ dir }}/servermon/servermon/manage.py loaddata vendor-model sampledata"

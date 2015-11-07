@@ -1,0 +1,20 @@
+---
+- hosts: dbservers
+  remote_user: vagrant
+  roles:
+    - { role: mysql, dbname: servermon, dbuser: servermon, dbpassword: servermon }
+
+- hosts: appservers
+  remote_user: vagrant
+  roles:
+    - { role: servermon, dbname: servermon, dbuser: servermon, dbpassword: servermon }
+
+- hosts: adm_runner
+  remote_user: vagrant
+  roles:
+    - { role: servermon, dbname: servermon, dbuser: servermon, dbpassword: servermon, adm: True }
+
+- hosts: webservers
+  remote_user: vagrant
+  roles:
+    - nginx

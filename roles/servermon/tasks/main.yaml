@@ -1,0 +1,5 @@
+---
+- include: prereqs.yaml
+- include: servermon.yaml
+- include: adm.yaml
+  when: adm

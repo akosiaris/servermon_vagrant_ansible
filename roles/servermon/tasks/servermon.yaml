@@ -1,0 +1,33 @@
+---
+- name: create /srv/deploy
+  sudo: true
+  file: "state=directory path={{ dir }} owner={{ ansible_user_id }} mode=0755"
+- name: create servermon user
+  sudo: true
+  user: name=servermon createhome=no shell=/usr/sbin/nologin
+- name: clone servermon
+  git:
+    repo: http://github.com/servermon/servermon.git
+    dest: "{{ dir }}/servermon"
+- name: set uwsgi configuration
+  sudo: true
+  template: src=servermon.ini.j2 dest=/etc/uwsgi/apps-available/servermon.ini owner=root group=root mode=444
+  notify:
+    - restart uwsgi
+- name: enable uwsgi configuration
+  sudo: true
+  file: path=/etc/uwsgi/apps-enabled/servermon.ini src=/etc/uwsgi/apps-available/servermon.ini state=link
+  notify:
+    - restart uwsgi
+- name: set servermon uwsgi application
+  sudo: true
+  template: "src=django.wsgi.j2 dest={{ dir }}/servermon/apache/django.wsgi owner=root group=root mode=444"
+  notify:
+    - restart uwsgi
+- name: set servermon configuration
+  template: "src=settings.py.j2 dest={{ dir }}/servermon/servermon/settings.py mode=444"
+  notify:
+    - restart uwsgi
+- name: start uwsgi
+  sudo: true
+  service: name=uwsgi state=started enabled=yes

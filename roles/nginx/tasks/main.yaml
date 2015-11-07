@@ -1,0 +1,19 @@
+---
+- name: Install nginx
+  sudo: true
+  apt: package=nginx state=installed
+- name: set nginx configuration
+  sudo: true
+  template: src=servermon.conf.j2 dest=/etc/nginx/sites-available/servermon.conf mode=444 owner=root group=root
+  notify:
+    - restart nginx
+- name: enable nginx configuration
+  sudo: true
+  file: src=/etc/nginx/sites-available/servermon.conf path=/etc/nginx/sites-enabled/servermon.conf state=link
+  notify:
+    - restart nginx
+- name: purge default nginx configuration
+  sudo: true
+  file: path=/etc/nginx/sites-enabled/default state=absent
+  notify:
+    - restart nginx

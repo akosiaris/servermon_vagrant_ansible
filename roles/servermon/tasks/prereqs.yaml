@@ -1,0 +1,14 @@
+---
+- name: install prereqs
+  sudo: true
+  apt: package={{ item }} state=installed
+  with_items:
+    - uwsgi
+    - uwsgi-plugin-python
+    - python-django
+    - python-whoosh
+    - python-ipy
+    - python-ldap
+    - python-mysqldb
+    - git
+

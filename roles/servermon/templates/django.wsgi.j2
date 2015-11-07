@@ -1,0 +1,10 @@
+import os
+import sys
+sys.path.append('{{ dir }}')
+sys.path.append('{{ dir }}/servermon')
+sys.path.append('{{ dir }}/servermon/servermon')
+os.environ['DJANGO_SETTINGS_MODULE'] = 'servermon.settings'
+
+import django.core.wsgi
+
+application = django.core.wsgi.get_wsgi_application()

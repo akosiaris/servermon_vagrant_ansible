@@ -1,8 +1,8 @@
 - name: set managed for puppet
   command: "sed -i -e 's/managed = False/managed = True/g' {{ dir }}/servermon/servermon/puppet/models.py"
 - name: run syncdb
-  command: "python {{ dir }}/servermon/servermon/manage.py syncdb --noinput"
+  django_manage: "command=syncdb app_path={{ dir }}/servermon/servermon"
 - name: run migrate
-  command: "python {{ dir }}/servermon/servermon/manage.py migrate --noinput"
+  django_manage: "command=migrate app_path={{ dir }}/servermon/servermon"
 - name: load sampledata
-  command: "python {{ dir }}/servermon/servermon/manage.py loaddata vendor-model sampledata"
+  django_manage: "command=loaddata app_path={{ dir }}/servermon/servermon fixtures='vendor-model sampledata'"

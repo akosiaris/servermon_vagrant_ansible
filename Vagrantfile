@@ -24,7 +24,7 @@ Vagrant.configure(2) do |config|
       lb01.vm.network 'private_network', type: 'dhcp'
       # We only run the provisioner once, for all boxes at once instead of each
       # box separately to get advantage of ansible's internal fact cache without
-      # having to setup fact caching
+      # having to setup fact caching. So only run it for the last VM
       lb01.vm.provision 'ansible' do |ansible|
           ansible.groups = {
               'appservers' => ['app01', 'app02'],
